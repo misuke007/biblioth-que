@@ -7,11 +7,14 @@ const { Op } = require('sequelize')
 
 const resaObsolete = async() =>{
 
-    const data = await Reservation.findAll({where:{date_recuperation : {[Op.lt] : new Date}}}) 
+    const data = await Reservation.findAll({where:{date_recuperation : {[Op.lt] : new Date}}})
 
     if(data.length != 0){
 
-        for(item of data){ await Reservation.destroy({where:{id : item.id}})}
+        for(item of data){ 
+
+            await Reservation.destroy({where:{id : item.id}})
+        }
 
     }
 

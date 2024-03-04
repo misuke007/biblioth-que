@@ -28,22 +28,22 @@ exports.ajoutReservation = (req, res) => {
 
 exports.validationEmprunt = async(req, res) => {
 
-    const {UtilisateurId} = req.body
+    const {UtilisateurId , LivreId} = req.body
     const [dureeEmprunt , dateEmprunt , ] = [14 , moment()]
 
     const dateRetour =  dateEmprunt.add(dureeEmprunt ,'days') 
     const dateRetourFormate =  dateRetour.format('YYYY-MM-DD')
 
-    const dataReservation = await Reservation.findOne({include : [Utilisateur , Livre] , where:{UtilisateurId}})
+    const dataReservation = await Reservation.findOne({include : [Utilisateur , Livre] , where:{UtilisateurId , LivreId}})
     const newEmprunt = Emprunt.build({
 
         UtilisateurId,
-        LivreId : dataReservation.LivreId,
+        LivreId : LivreId,
         date_retour_prevu : dateRetourFormate,
     })
 
     await newEmprunt.save()
-    await Reservation.destroy({where:{LivreId : dataReservation.LivreId}})
+    await Reservation.destroy({where:{LivreId , UtilisateurId}})
     return res.status(200).json({message : `Emprunt du livre ${dataReservation.Livre.titre} validé!`})
 
 }
@@ -59,9 +59,19 @@ exports.rechercheReservation = (req, res) => {
 
 
 
-// exports.retourLIvre = async(req, res) => {
+exports.retourLivre = async(req, res) => {
 
-//     const {id} = req.body  
+    const {UtilisateurId , LivreId} = req.body
+    const date_retour_actuelle = new Date()
+    const dataEmprunt = await Emprunt.findOne({where:{UtilisateurId , LivreId}})
+    const dataLivre = await Livre.findOne({where:{id : LivreId}})
+    dataEmprunt.date_retour_actuelle = date_retour_actuelle
+    dataLivre.exemplaire += 1 
+    await dataEmprunt.save()
+    await dataLivre.save()
+    return res.status(200).json({message : 'retour validé!'})
 
-// }
+
+
+}
 
