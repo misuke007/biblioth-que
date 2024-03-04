@@ -3,6 +3,8 @@ const {ajout , miseJour , supprimer , voirTout, voirUn , recherche} = require('.
 const moment = require('moment')
 
 Utilisateur.hasMany(Reservation)
+Livre.hasMany(Emprunt)
+Emprunt.belongsTo(Livre)
 Reservation.belongsTo(Utilisateur)
 Livre.hasMany(Reservation)
 Reservation.belongsTo(Livre)
@@ -55,6 +57,14 @@ exports.rechercheReservation = (req, res) => {
     const {rech} = req.body
     recherche(req, res , Reservation , rech)
 
+}
+
+
+
+exports.rechercheEmprunt = (req, res) => {
+
+    const {rech} = req.body
+    recherche(req, res , Emprunt , rech)
 }
 
 
