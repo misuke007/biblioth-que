@@ -8,8 +8,11 @@ const { Op } = require('sequelize')
 
 const resaObsolete = async () => {
 
+
     const dataReservation = await Reservation.findAll({ where: { date_recuperation: { [Op.lt]: new Date } } })
     let dataLivre
+
+    const data = await Reservation.findAll({where:{date_recuperation : {[Op.lt] : new Date}}}) 
 
     if (dataReservation.length != 0) {
 

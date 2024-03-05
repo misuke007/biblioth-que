@@ -26,8 +26,6 @@ exports.enregistrementMembre = (req, res) => {
     
 }
 
-
-
 exports.verificationCarte = async(req, res) => {
 
     const {numero  , cvv  , date_expiration} = req.body

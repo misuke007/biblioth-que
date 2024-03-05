@@ -3,8 +3,6 @@ const {ajout , miseJour , supprimer , voirTout, voirUn , recherche} = require('.
 const moment = require('moment')
 
 Utilisateur.hasMany(Reservation)
-Livre.hasMany(Emprunt)
-Emprunt.belongsTo(Livre)
 Reservation.belongsTo(Utilisateur)
 Livre.hasMany(Reservation)
 Reservation.belongsTo(Livre)
@@ -30,22 +28,39 @@ exports.ajoutReservation = (req, res) => {
 
 exports.validationEmprunt = async(req, res) => {
 
-    const {UtilisateurId , LivreId} = req.body
+    const {UtilisateurId} = req.body
     const [dureeEmprunt , dateEmprunt , ] = [14 , moment()]
 
     const dateRetour =  dateEmprunt.add(dureeEmprunt ,'days') 
     const dateRetourFormate =  dateRetour.format('YYYY-MM-DD')
 
-    const dataReservation = await Reservation.findOne({include : [Utilisateur , Livre] , where:{UtilisateurId , LivreId}})
+    const dataReservation = await Reservation.findOne({include : [Utilisateur , Livre] , where:{UtilisateurId}})
+
     const newEmprunt = Emprunt.build({
 
         UtilisateurId,
-        LivreId : LivreId,
+        LivreId : dataReservation.LivreId,
         date_retour_prevu : dateRetourFormate,
     })
 
+    let livre =  await Livre.findOne({where : {id : dataReservation.LivreId}})
+
+    let popularite = livre.popularite + 1
+    let exemplaire = livre.exemplaire - 1
+
+    livre = {
+        titre : livre.titre,
+        auteur : livre.auteur,
+        annee_publication : livre.annee_publication,
+        popularite : popularite,
+        exemplaire :exemplaire,
+        CategoryId : livre.CategoryId,
+        couverture : livre.couverture
+    }
+
+    await Livre.update(livre ,{where : {id : dataReservation.LivreId}})
     await newEmprunt.save()
-    await Reservation.destroy({where:{LivreId , UtilisateurId}})
+    await Reservation.destroy({where:{LivreId : dataReservation.LivreId}})
     return res.status(200).json({message : `Emprunt du livre ${dataReservation.Livre.titre} validé!`})
 
 }
@@ -61,27 +76,16 @@ exports.rechercheReservation = (req, res) => {
 
 
 
-exports.rechercheEmprunt = (req, res) => {
+// exports.retourLIvre = async(req, res) => {
 
-    const {rech} = req.body
-    recherche(req, res , Emprunt , rech)
-}
+//     const {id} = req.body  
 
+// }
 
+exports.historique =  async(req, res)  => {
 
-exports.retourLivre = async(req, res) => {
+    const historique = await Emprunt.findAll()
 
-    const {UtilisateurId , LivreId} = req.body
-    const date_retour_actuelle = new Date()
-    const dataEmprunt = await Emprunt.findOne({where:{UtilisateurId , LivreId}})
-    const dataLivre = await Livre.findOne({where:{id : LivreId}})
-    dataEmprunt.date_retour_actuelle = date_retour_actuelle
-    dataLivre.exemplaire += 1 
-    await dataEmprunt.save()
-    await dataLivre.save()
-    return res.status(200).json({message : 'retour validé!'})
-
-
-
+    return res.status(200).json(historique)
 }
 

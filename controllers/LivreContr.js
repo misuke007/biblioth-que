@@ -1,5 +1,5 @@
 
-const {Livre , Categorie} = require('../models')
+const {Livre , Categorie, Emprunt} = require('../models')
 const {enregistrement} = require('../library/optionFichier')
 const {ajout , miseJour , supprimer , voirTout, voirUn , recherche} = require('./ContrBase')
 const {nouveauNom} = require('../library/optionFichier')
@@ -95,3 +95,14 @@ exports.trierParCategorie = async (req, res) => {
 
     }catch(error){return res.status(200).json({error : constante.error500})}
 }
+
+exports.popularite = async (req, res)=> {
+     try {
+        let data =  await Livre.findAll({order : [['popularite' , 'DESC']]})
+        return res.status(200).json(data)
+     } catch (error) {
+        console.log(error)
+     }
+}
+
+

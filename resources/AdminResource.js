@@ -10,7 +10,9 @@ const {
     voirToutMembre,
     voirToutAdmin,
     voirUnMembre,
-    voirUnAdmin } = require('../controllers/AdminContr')
+    voirUnAdmin, 
+    paiementMembre,
+    disponibilitéLivre} = require('../controllers/AdminContr')
 
 
 
@@ -24,5 +26,7 @@ router.get('/unAdmin/:id' , voirUnAdmin)
 router.post('/ajoutAdmin' ,ajoutAdmin )
 router.put('/miseJourAdmin/:id' ,modifAdmin )
 router.delete('/supprimerUtilisateur/:id' , suppprimerUtilisateur)
+router.post('/paiementMembre/:id' , paiementMembre)
+router.get('/disponibilite' , disponibilitéLivre)
 
 module.exports = router

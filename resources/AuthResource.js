@@ -7,12 +7,8 @@ const {
     enregistrementMembre, 
     verificationCarte, 
     validationPaiement, 
-    login } = require('../controllers/AuthContr')
-
-
-
-
-
+    login, 
+    } = require('../controllers/AuthContr')
 
 router.post('/inscription' , enregistrementMembre)
 router.post('/verificationValiditeCarte' ,  securiteCb , verificationCarte)

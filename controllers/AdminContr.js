@@ -1,9 +1,10 @@
-const { Utilisateur} = require('../models')
+const { Utilisateur, Livre} = require('../models')
 const {ajout , miseJour , supprimer , voirTout, voirUn } = require('./ContrBase')
 const {nouveauNom, enregistrement} = require('../library/optionFichier')
 const genereMdp = require('../library/creationMdp')
 const bcrypt = require('bcryptjs')
 const fs= require('fs')
+const { Op } = require('sequelize')
 
 
 
@@ -63,6 +64,29 @@ exports.suppprimerUtilisateur = async(req, res) => {
 
 
 
+exports.paiementMembre = async(req, res)  => {
+
+    try {
+
+        let utilisateur =  await Utilisateur.findOne({where : {id :req.params.id}})
+
+        utilisateur = {
+            nom : utilisateur.nom,
+            prenom : utilisateur.prenom,
+            adresse : utilisateur.adresse,
+            badge : utilisateur.badge,
+            statut : 'actif',
+            photo : utilisateur.photo,
+            mot_de_passe : utilisateur.mot_de_passe
+        }
+        await Utilisateur.update(utilisateur,{where : {id :req.params.id}})
+       
+        return res.status(200).json({message : 'Paiement Effectuée' , utilisateur})
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
@@ -75,3 +99,21 @@ exports.voirToutAdmin = (req, res) => {voirTout(req, res , Utilisateur , badge =
 exports.voirUnMembre = (req, res) => {voirUn(req, res , Utilisateur , id = req.params.id , badge = 'membre')}
 
 exports.voirUnAdmin = (req, res) => {voirUn(req, res , Utilisateur , id = req.params.id , badge = 'ADMIN')}
+
+
+
+
+exports.disponibilitéLivre = async(req, res)  => {
+    try {
+
+        const livre = await Livre.findAll({where : {
+            exemplaire : {
+                [Op.ne] : 0
+            }
+        }})
+        return res.status(200).json({message : 'Les livres disponibles' , livre})
+        
+    } catch (error) {
+        console.log(error)
+    }
+}

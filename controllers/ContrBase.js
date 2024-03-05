@@ -1,6 +1,6 @@
 
 const {Op} = require('sequelize')
-const {Categorie , Livre , Reservation , Utilisateur , Emprunt} = require('../models')
+const {Categorie , Livre , Reservation , Utilisateur} = require('../models')
 const constante = require('../constantes/constantes')
 const jwt = require('jsonwebtoken')
 exports.ajout = async(req, res , table , data , passAdmin) => {
@@ -189,8 +189,8 @@ exports.recherche = async(req , res , table , rech , colonne ) => {
                     model : Utilisateur,
                     where:{[Op.or] : [
     
-                       {nom : {[Op.like] : `%${rech}%`}},
-                       {prenom : {[Op.like] : `%${rech}%`}}
+                       {nom : {[Op.like] : `${rech}`}},
+                       {prenom : {[Op.like] : `${rech}`}}
     
                     ]}
     
@@ -200,22 +200,6 @@ exports.recherche = async(req , res , table , rech , colonne ) => {
             return dataReservation.length !== 0 ? res.status(200).json({dataReservation}):  res.status(200).json({message_error : `Aucun resultat!`})
 
         }catch(error){console.log(error)}
-
-
-    } else if(table.getTableName() == "Emprunts"){
-
-        const dataEmprunt = await Emprunt.findAll({include :[{
-
-            model : Utilisateur,
-            where:{[Op.or] : [
-    
-                {nom : {[Op.like] : `%${rech}%`}},
-                {prenom : {[Op.like] : `%${rech}%`}}
-             ]}
-
-        } , Livre]})
-
-        return dataEmprunt.length !== 0 ? res.status(200).json(dataEmprunt) : res.status(200).json({message_error :'Aucun resultat!'})
 
     }
 }

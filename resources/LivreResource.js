@@ -8,7 +8,8 @@ const {
     toutLivre,
     unLivre ,
     rechercheLivre ,
-    trierParCategorie} = require('../controllers/LivreContr')
+    trierParCategorie,
+    popularite} = require('../controllers/LivreContr')
 
 
 
@@ -21,6 +22,7 @@ router.delete('/livre/supprimer/:id' , supprimerLivre)
 router.get('/livre/tout' , toutLivre)
 router.get('/livre/un/:id' , unLivre)
 router.get('/livre/triParCategorie/:categorieId' , trierParCategorie)
+router.get('/livre/popularite' , popularite)
 
 
 
