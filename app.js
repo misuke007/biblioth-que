@@ -42,11 +42,7 @@ setInterval(calculAmende , 24*60*60*1000)
 setInterval(resaObsolete , 24*60*60*1000)
 
 
-<<<<<<< HEAD
 db.sequelize.sync({force :false})
-=======
-db.sequelize.sync()
->>>>>>> e1bb39d11cbbcc3baf91c50f51b86344086e5669
 
 .then(() => {
 
