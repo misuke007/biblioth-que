@@ -26,11 +26,6 @@ exports.enregistrementMembre = (req, res) => {
     
 }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> e1bb39d11cbbcc3baf91c50f51b86344086e5669
 exports.verificationCarte = async(req, res) => {
 
     const {numero  , cvv  , date_expiration} = req.body
@@ -118,8 +113,4 @@ exports.login = async(req, res) => {
 
     }catch(error){console.log(error)}
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> e1bb39d11cbbcc3baf91c50f51b86344086e5669
