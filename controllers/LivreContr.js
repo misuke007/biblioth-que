@@ -95,3 +95,5 @@ exports.trierParCategorie = async (req, res) => {
 
     }catch(error){return res.status(200).json({error : constante.error500})}
 }
+
+

@@ -63,6 +63,7 @@ exports.suppprimerUtilisateur = async(req, res) => {
 
 
 
+<<<<<<< HEAD
 exports.paiementMembre = async(req, res)  => {
 
     try {
@@ -86,6 +87,8 @@ exports.paiementMembre = async(req, res)  => {
         console.log(error)
     }
 }
+=======
+>>>>>>> e1bb39d11cbbcc3baf91c50f51b86344086e5669
 
 
 
@@ -98,5 +101,8 @@ exports.voirToutAdmin = (req, res) => {voirTout(req, res , Utilisateur , badge =
 exports.voirUnMembre = (req, res) => {voirUn(req, res , Utilisateur , id = req.params.id , badge = 'membre')}
 
 exports.voirUnAdmin = (req, res) => {voirUn(req, res , Utilisateur , id = req.params.id , badge = 'ADMIN')}
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> e1bb39d11cbbcc3baf91c50f51b86344086e5669
