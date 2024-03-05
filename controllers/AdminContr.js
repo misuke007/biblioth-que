@@ -1,9 +1,10 @@
-const { Utilisateur} = require('../models')
+const { Utilisateur, Livre} = require('../models')
 const {ajout , miseJour , supprimer , voirTout, voirUn } = require('./ContrBase')
 const {nouveauNom, enregistrement} = require('../library/optionFichier')
 const genereMdp = require('../library/creationMdp')
 const bcrypt = require('bcryptjs')
 const fs= require('fs')
+const { Op } = require('sequelize')
 
 
 
@@ -100,3 +101,19 @@ exports.voirUnMembre = (req, res) => {voirUn(req, res , Utilisateur , id = req.p
 exports.voirUnAdmin = (req, res) => {voirUn(req, res , Utilisateur , id = req.params.id , badge = 'ADMIN')}
 
 
+
+
+exports.disponibilitéLivre = async(req, res)  => {
+    try {
+
+        const livre = await Livre.findAll({where : {
+            exemplaire : {
+                [Op.ne] : 0
+            }
+        }})
+        return res.status(200).json({message : 'Les livres disponibles' , livre})
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
