@@ -1,8 +1,9 @@
 
 const {Op} = require('sequelize')
-const {Categorie , Livre , Reservation , Utilisateur} = require('../models')
+const {Categorie , Livre , Reservation , Utilisateur , Notification} = require('../models')
 const constante = require('../constantes/constantes')
 const jwt = require('jsonwebtoken')
+
 exports.ajout = async(req, res , table , data , passAdmin) => {
 
 
@@ -30,10 +31,13 @@ exports.ajout = async(req, res , table , data , passAdmin) => {
             if(dataLivre.exemplaire !== 0){
 
             const newData = table.build(data)
-            const prevData =  await newData.save()
-            const dataLivre = await Livre.findOne({where:{id : prevData.LivreId}})
+            const newNotification = Notification.build({UtilisateurId : data.UtilisateurId , NotificationType : "Reservation"})
+            const dataLivre = await Livre.findOne({where:{id : data.LivreId}})
             dataLivre.exemplaire -= 1
             await dataLivre.save()
+            await newData.save()
+            await newNotification.save()
+            
             return res.status(200).json({message : `Réservation réussie pour le livre ${dataLivre.titre}`})
 
             }else{return res.status(200).json({message_error : `Ce livre n'est pas encore disponible pour le moment!`})}

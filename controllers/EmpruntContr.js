@@ -1,4 +1,4 @@
-const {Emprunt , Utilisateur , Reservation , Livre } = require('../models')
+const {Emprunt , Utilisateur , Reservation , Livre , Notification } = require('../models')
 const {ajout , miseJour , supprimer , voirTout, voirUn , recherche} = require('./ContrBase')
 const moment = require('moment')
 
@@ -8,6 +8,9 @@ Livre.hasMany(Reservation)
 Reservation.belongsTo(Livre)
 Utilisateur.hasMany(Emprunt)
 Emprunt.belongsTo(Utilisateur)
+Utilisateur.hasMany(Notification)
+Notification.belongsTo(Utilisateur)
+
 
 
 
@@ -76,11 +79,6 @@ exports.rechercheReservation = (req, res) => {
 
 
 
-// exports.retourLIvre = async(req, res) => {
-
-//     const {id} = req.body  
-
-// }
 
 exports.historique =  async(req, res)  => {
 
