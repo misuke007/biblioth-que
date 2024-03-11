@@ -9,7 +9,9 @@ const {
     unLivre ,
     rechercheLivre ,
     trierParCategorie,
-    popularite} = require('../controllers/LivreContr')
+    popularite,
+    commentaire,
+    reponse} = require('../controllers/LivreContr')
 
 
 
@@ -23,6 +25,8 @@ router.get('/livre/tout' , toutLivre)
 router.get('/livre/un/:id' , unLivre)
 router.get('/livre/triParCategorie/:categorieId' , trierParCategorie)
 router.get('/livre/popularite' , popularite)
+router.post('/livre/commentaire/:id' , commentaire)
+router.post('/livre/commentaire/reponse/:id' , reponse)
 
 
 

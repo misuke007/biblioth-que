@@ -1,5 +1,5 @@
 
-const {Livre , Categorie, Emprunt} = require('../models')
+const {Livre , Categorie, Emprunt,Utilisateur, Commentaire, Reponse} = require('../models')
 const {enregistrement} = require('../library/optionFichier')
 const {ajout , miseJour , supprimer , voirTout, voirUn , recherche} = require('./ContrBase')
 const {nouveauNom} = require('../library/optionFichier')
@@ -7,8 +7,21 @@ const fs = require('fs')
 const constante = require('../constantes/constantes')
 
 
+
 Categorie.hasOne(Livre)
 Livre.belongsTo(Categorie)
+
+Utilisateur.hasMany(Commentaire)
+Commentaire.belongsTo(Utilisateur)
+
+Livre.hasMany(Commentaire)
+Commentaire.belongsTo(Livre)
+
+Commentaire.hasMany(Reponse)
+Reponse.belongsTo(Commentaire)
+
+Utilisateur.hasMany(Reponse)
+Reponse.belongsTo(Utilisateur)
 
 
 
@@ -104,5 +117,42 @@ exports.popularite = async (req, res)=> {
         console.log(error)
      }
 }
+exports.commentaire = async(req, res) => {
+    try {
+    
+        const {commentaire , UtilisateurId} = req.body  
+       
+        const new_commentaire = Commentaire.build({
+            commentaire,
+            UtilisateurId,
+            LivreId : req.params.id
+        }) 
+        await new_commentaire.save()
+        return res.status(200).json(new_commentaire)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.reponse =async(req, res)=> {
+    try {
+    
+        const {commentaire , UtilisateurId} = req.body  
+       
+        const new_reponse = Reponse.build({
+            commentaire,
+            UtilisateurId,
+            CommentaireId : req.params.id
+        }) 
+        await new_reponse.save()
+        return res.status(200).json(new_reponse)
+    } catch (error) {
+        console.log(error)
+    }
+}
+ 
+
+
+
 
 
