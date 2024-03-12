@@ -9,6 +9,7 @@ require('./config/passportMembreActif')
 
 const resaObsolete = require('./library/reservationObsolete')
 const calculAmende = require('./library/calculAmende')
+const notificationUtilisateur = require('./library/notification')
 
 const CategorieResource = require('./resources/CategorieResource')
 const LivreResource = require('./resources/LivreResource')
@@ -36,10 +37,15 @@ app.use('/emprunt' , EmpruntResource)
 
 
 
+
+
+
 resaObsolete()
 calculAmende()
-setInterval(calculAmende , 24*60*60*1000)
-setInterval(resaObsolete , 24*60*60*1000)
+notificationUtilisateur()
+setInterval(notificationUtilisateur , 24*60*60*1000)
+setInterval(calculAmende ,  24*60*60*1000)
+setInterval(resaObsolete ,  24*60*60*1000)
 
 
 db.sequelize.sync()

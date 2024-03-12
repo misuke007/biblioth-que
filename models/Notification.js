@@ -22,6 +22,14 @@ module.exports = (sequelize , datatype) => {
 
         },
 
+        
+        message:{
+
+            type : datatype.TEXT,
+            allowNull : false
+
+        },
+
         lu:{
 
             type : datatype.BOOLEAN,

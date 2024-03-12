@@ -10,6 +10,9 @@ Utilisateur.hasMany(Emprunt)
 Emprunt.belongsTo(Utilisateur)
 Utilisateur.hasMany(Notification)
 Notification.belongsTo(Utilisateur)
+Livre.hasMany(Emprunt)
+Emprunt.belongsTo(Livre)
+
 
 
 
@@ -31,18 +34,18 @@ exports.ajoutReservation = (req, res) => {
 
 exports.validationEmprunt = async(req, res) => {
 
-    const {UtilisateurId} = req.body
+    const {UtilisateurId , LivreId} = req.body
     const [dureeEmprunt , dateEmprunt , ] = [14 , moment()]
 
     const dateRetour =  dateEmprunt.add(dureeEmprunt ,'days') 
     const dateRetourFormate =  dateRetour.format('YYYY-MM-DD')
 
-    const dataReservation = await Reservation.findOne({include : [Utilisateur , Livre] , where:{UtilisateurId}})
+    const dataReservation = await Reservation.findOne({include : [Utilisateur , Livre] , where:{UtilisateurId , LivreId}})
 
     const newEmprunt = Emprunt.build({
 
         UtilisateurId,
-        LivreId : dataReservation.LivreId,
+        LivreId,
         date_retour_prevu : dateRetourFormate,
     })
 
@@ -63,7 +66,7 @@ exports.validationEmprunt = async(req, res) => {
 
     await Livre.update(livre ,{where : {id : dataReservation.LivreId}})
     await newEmprunt.save()
-    await Reservation.destroy({where:{LivreId : dataReservation.LivreId}})
+    await Reservation.destroy({where:{LivreId : dataReservation.LivreId , UtilisateurId : UtilisateurId }})
     return res.status(200).json({message : `Emprunt du livre ${dataReservation.Livre.titre} validé!`})
 
 }

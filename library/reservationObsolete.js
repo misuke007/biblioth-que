@@ -1,6 +1,7 @@
 
 const { Reservation , Livre } = require('../models')
 const { Op } = require('sequelize')
+const moment = require('moment')
 
 
 // cette fonction permet de vérifier si une réservation est obsolète ou non. si oui => la reservation sera supprimer
@@ -8,13 +9,13 @@ const { Op } = require('sequelize')
 
 const resaObsolete = async () => {
 
+    let [limite , decalage , dataLivre] = [100 , 0 , undefined] 
 
-    const dataReservation = await Reservation.findAll({ where: { date_recuperation: { [Op.lt]: new Date } } })
-    let dataLivre
 
-    const data = await Reservation.findAll({where:{date_recuperation : {[Op.lt] : new Date}}}) 
+    while(true){
 
-    if (dataReservation.length != 0) {
+        const dataReservation = await Reservation.findAll({where:{date_recuperation : {[Op.lt] : moment().startOf('days')}} , limit : limite , offset:  decalage}) 
+        if(dataReservation.length === 0) break
 
         for (item of dataReservation) {
 
@@ -23,6 +24,8 @@ const resaObsolete = async () => {
             dataLivre.exemplaire += 1
             await dataLivre.save()
         }
+
+        decalage += limite
 
     }
 

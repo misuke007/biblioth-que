@@ -1,4 +1,8 @@
-let message = " Bonjour, comment ça va ?"
+// const moment = require('moment')
 
-let extrait3 = message.substring(12, 5);
-console.log(extrait3);  // Résultat : "ur, co"
+
+// const date = moment('2024-03-11').startOf('days')
+// const dateBdd = moment('2024-03-10').startOf('days')
+
+// const result = dateBdd.diff(date , 'days')
+// console.log(result)
