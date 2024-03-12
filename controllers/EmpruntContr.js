@@ -51,20 +51,9 @@ exports.validationEmprunt = async(req, res) => {
 
     let livre =  await Livre.findOne({where : {id : dataReservation.LivreId}})
 
-    let popularite = livre.popularite + 1
-    let exemplaire = livre.exemplaire - 1
-
-    livre = {
-        titre : livre.titre,
-        auteur : livre.auteur,
-        annee_publication : livre.annee_publication,
-        popularite : popularite,
-        exemplaire :exemplaire,
-        CategoryId : livre.CategoryId,
-        couverture : livre.couverture
-    }
-
-    await Livre.update(livre ,{where : {id : dataReservation.LivreId}})
+    livre.popularite += 1
+ 
+    await livre.save()
     await newEmprunt.save()
     await Reservation.destroy({where:{LivreId : dataReservation.LivreId , UtilisateurId : UtilisateurId }})
     return res.status(200).json({message : `Emprunt du livre ${dataReservation.Livre.titre} validé!`})
