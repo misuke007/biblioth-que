@@ -10,7 +10,7 @@ let option = {
     secretOrKey : 'secret' 
 }
 
-passport.use(new JwtStrategy (option , async(paylode , done ) => {
+passport.use("membre" ,  new JwtStrategy (option , async(paylode , done ) => {
 
     try{
 
